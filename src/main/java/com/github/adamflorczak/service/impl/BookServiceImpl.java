@@ -1,7 +1,7 @@
 package com.github.adamflorczak.service.impl;
 
-import com.github.adamflorczak.model.Author;
-import com.github.adamflorczak.model.Book;
+import com.github.adamflorczak.exceptions.ValidationException;
+import com.github.adamflorczak.model.*;
 import com.github.adamflorczak.repository.AuthorRepository;
 import com.github.adamflorczak.repository.BookRepository;
 import com.github.adamflorczak.service.BookService;
@@ -28,7 +28,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findOneByID(Long id) {
-        return bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        return bookRepository.findById(id).orElseThrow(ValidationException::new);
     }
 
     @Override
@@ -37,18 +37,32 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Book book) {
-        Optional<Author> optionalAuthor = authorRepository.findByFirstNameAndLastName(book.getAuthor().getFirstName(), book.getAuthor().getLastName());
+    public Book createBook(BookCreateDTO book) {
+        Optional<Author> optionalAuthor = authorRepository.findByFirstNameAndLastName(
+                book.getAuthorDTO().getFirstName(),
+                book.getAuthorDTO().getLastName());
+        Book bookMap = new Book();
         if (optionalAuthor.isPresent()){
-            Author authorek = optionalAuthor.get();
-            book.setAuthor(authorek);
-            bookRepository.save(book);
+            Author authorMap = optionalAuthor.get();
+            bookMap.setTitle(book.getTitle());
+            bookMap.setAuthor(authorMap);
+            return bookRepository.save(bookMap);
         }
-        return bookRepository.save(book);
+        Address address = new Address(book.getAuthorDTO().getStreet(), book.getAuthorDTO().getCity(), book.getAuthorDTO().getCountry());
+        Author author = new Author(book.getAuthorDTO().getFirstName(), book.getAuthorDTO().getLastName(), book.getAuthorDTO().getGender(), address);
+        bookMap.setTitle(book.getTitle());
+        bookMap.setAuthor(author);
+        return bookRepository.save(bookMap);
     }
 
     @Override
     public void deleteOneById(Long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Book> findBookByTitle(String title) {
+        return bookRepository.findBookByTitle(title);
+
     }
 }

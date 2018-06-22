@@ -1,14 +1,14 @@
 package com.github.adamflorczak.service.impl;
 
+import com.github.adamflorczak.exceptions.ValidationError;
+import com.github.adamflorczak.exceptions.ValidationException;
 import com.github.adamflorczak.model.Author;
 import com.github.adamflorczak.repository.AuthorRepository;
 import com.github.adamflorczak.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -22,7 +22,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author findOneById(Long id) {
-        return authorRepository.findById(id).orElseThrow(RuntimeException::new);
+        return authorRepository.findById(id).orElseThrow(ValidationException::new);
     }
 
     @Override
@@ -47,6 +47,19 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Optional<Author> findAuthorByFirstNameAndLastName(String firstName, String lastName) {
-        return Optional.ofNullable(authorRepository.findByFirstNameAndLastName(firstName, lastName)).orElseThrow(null);
+        return Optional.ofNullable(authorRepository.findByFirstNameAndLastName(firstName, lastName)).orElse(null);
+    }
+
+    private void validate(String firstName, String lastName){
+        List<ValidationError> errorList = new ArrayList<>();
+        if(firstName == null){
+            ValidationError error = new ValidationError("firstName", "May not be null");
+            errorList.add(error);
+        }
+        if(lastName == null){
+            ValidationError error = new ValidationError("lastName", "May not be null");
+            errorList.add(error);
+        }
+
     }
 }

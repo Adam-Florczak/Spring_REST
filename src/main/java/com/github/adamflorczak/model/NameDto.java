@@ -1,5 +1,6 @@
 package com.github.adamflorczak.model;
 
+// Do HelloWorldController
 public class NameDto {
 
     private String name;

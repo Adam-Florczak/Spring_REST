@@ -1,4 +1,4 @@
-package com.github.adamflorczak.weathermap;
+package com.github.adamflorczak.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

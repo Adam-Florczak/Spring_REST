@@ -4,23 +4,26 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // identity = dodawaj id co 1;
-    // Long referencyjny w bazie danych jest po to, żeby mógł być nullem. Tzn, że nie ma wartości. long prymitywny może mieć wartość 0
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // @Lob dla dużych tekstów
     @Column(unique = true)
     private String title;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "author_id")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Author author;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "rents")
+    private Set<Rent> bookRents;
 
     public Book() {
     }
@@ -62,18 +65,12 @@ public class Book {
         this.author = author;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Book)) return false;
-        Book book = (Book) o;
-        return Objects.equals(getTitle(), book.getTitle()) &&
-                Objects.equals(author, book.author);
+    public Set<Rent> getBookRents() {
+        return bookRents;
     }
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getTitle(), author);
+    public void setBookRents(Set<Rent> bookRents) {
+        this.bookRents = bookRents;
     }
+
 }

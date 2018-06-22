@@ -1,4 +1,4 @@
-package com.github.adamflorczak.CurrencyConverter;
+package com.github.adamflorczak.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -78,22 +78,6 @@ public class ExchangeRate {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ExchangeRate)) return false;
-        ExchangeRate that = (ExchangeRate) o;
-        return isSuccess() == that.isSuccess() &&
-                Objects.equals(getTimestamp(), that.getTimestamp()) &&
-                Objects.equals(getSource(), that.getSource()) &&
-                Objects.equals(getQuotes(), that.getQuotes());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(isSuccess(), getTimestamp(), getSource(), getQuotes());
-    }
 }
 
 

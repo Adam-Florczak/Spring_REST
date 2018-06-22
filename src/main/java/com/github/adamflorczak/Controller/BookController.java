@@ -1,10 +1,13 @@
 package com.github.adamflorczak.Controller;
 
 import com.github.adamflorczak.model.Book;
+import com.github.adamflorczak.model.BookCreateDTO;
+import com.github.adamflorczak.model.BookDTO;
 import com.github.adamflorczak.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -21,19 +24,23 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book findById(@PathVariable Long id){
-        return bookService.findOneByID(id);
+    public BookDTO findById(@PathVariable Long id){
+        Book book = bookService.findOneByID(id);
+        return new BookDTO(book);
     }
 
-    @GetMapping // bez mappingu, czyli /api/books i poda książki
-    public Set<Book> findAll(){
-        return bookService.findAll();
+    @GetMapping
+    public Set<BookDTO> findAll(){
+        Set<BookDTO> result = new HashSet<>();
+        Set<Book> allBooks = bookService.findAll();
+        allBooks.forEach(b -> result.add(new BookDTO(b)));
+        return result;
     }
 
     @PostMapping
-    public Book create(@RequestBody Book newBook){
+    public BookDTO create(@RequestBody BookCreateDTO newBook){
 
-        return bookService.createBook(newBook);
+        return new BookDTO(bookService.createBook(newBook));
     }
 
     @DeleteMapping("/{id}")

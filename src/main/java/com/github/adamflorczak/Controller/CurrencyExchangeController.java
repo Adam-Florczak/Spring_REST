@@ -1,6 +1,6 @@
-package com.github.adamflorczak.CurrencyConverter;
+package com.github.adamflorczak.Controller;
 
-import com.github.adamflorczak.CurrencyConverter.ExchangeRate;
+import com.github.adamflorczak.model.ExchangeRate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +33,6 @@ public class CurrencyExchangeController {
         double result = amount * fxRate;
 
         return "Przekonwertowałeś " + fromCurr.toUpperCase() + " " + amount + " na " + toCurr.toUpperCase() + " " + result;
-       // return BigDecimal.valueOf(result);
     }
 
 }

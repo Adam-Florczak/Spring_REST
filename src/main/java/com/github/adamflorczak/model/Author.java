@@ -18,16 +18,19 @@ public class Author {
     private String lastName;
     @Enumerated(EnumType.STRING) // ULTRA WAŻNE BY DAC TE ADNOTACJE Z EnumType.STRING!!!!!
     private Gender gender;
-    @OneToMany // fetch = eager czyli gdy obiektów potrzebujemy zawsze / fetch = lazy, gdy dopiero potrzebujemy zasób
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Address address;
+    @OneToMany(mappedBy = "author"/*, cascade = CascadeType.MERGE*/) // fetch = eager czyli gdy obiektów potrzebujemy zawsze / fetch = lazy, gdy dopiero potrzebujemy zasób
     private Set<Book> books = new HashSet<>();
 
     public Author() {
     }
 
-    public Author(String firstName, String lastName, Gender gender) {
+    public Author(String firstName, String lastName, Gender gender, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
+        this.address = address;
     }
 
     public Long getId() {
@@ -62,6 +65,13 @@ public class Author {
         this.gender = gender;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     @Override
     public String toString() {
@@ -73,20 +83,4 @@ public class Author {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Author)) return false;
-        Author author = (Author) o;
-        return Objects.equals(getFirstName(), author.getFirstName()) &&
-                Objects.equals(getLastName(), author.getLastName()) &&
-                getGender() == author.getGender() &&
-                Objects.equals(books, author.books);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getFirstName(), getLastName(), getGender(), books);
-    }
 }

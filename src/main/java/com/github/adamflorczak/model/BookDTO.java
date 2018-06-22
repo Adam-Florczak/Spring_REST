@@ -1,6 +1,5 @@
 package com.github.adamflorczak.model;
 
-import com.github.adamflorczak.model.Book;
 
 public class BookDTO {
 
@@ -8,14 +7,14 @@ public class BookDTO {
     private String title;
     private String authorFirstName;
     private String authorLastName;
-    private Long authorId;
+    private Gender gender;
 
     public BookDTO(Book book) {
         this.id = book.getId();
         this.title = book.getTitle();
         this.authorFirstName = book.getAuthor().getFirstName();
         this.authorLastName = book.getAuthor().getLastName();
-        this.authorId = book.getAuthor().getId();
+        this.gender = book.getAuthor().getGender();
     }
 
     public BookDTO() {
@@ -53,11 +52,13 @@ public class BookDTO {
         this.authorLastName = authorLastName;
     }
 
-    public Long getAuthorId() {
-        return authorId;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
+
+
 }

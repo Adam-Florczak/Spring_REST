@@ -3,7 +3,8 @@ package com.github.adamflorczak.model;
 public class BookCreateDTO {
 
     private String title;
-    private Long authorId;
+    private AuthorDTO authorDTO;
+
 
     public String getTitle() {
         return title;
@@ -13,11 +14,12 @@ public class BookCreateDTO {
         this.title = title;
     }
 
-    public Long getAuthorId() {
-        return authorId;
+
+    public void setAuthorDTO(AuthorDTO authorDTO) {
+        this.authorDTO = authorDTO;
     }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
+    public AuthorDTO getAuthorDTO() {
+        return authorDTO;
     }
 }
